@@ -39,7 +39,7 @@ NemoWindow {
     property alias initialPage: stackView.initialItem
 
     property alias orientation: contentArea.uiOrientation
-    readonly property int isUiPortrait: orientation == Qt.PortraitOrientation || orientation == Qt.InvertedPortraitOrientation
+    readonly property int isUiPortrait: root.width < root.height
     //is this safe? can there be some situation in which it's neither portrait nor landscape?
     readonly property int isUiLandscape: !isUiPortrait
 
