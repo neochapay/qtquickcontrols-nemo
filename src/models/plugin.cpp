@@ -18,6 +18,7 @@
  */
 
 #include "calendarmodel.h"
+#include "imageslistmodel.h"
 
 #include <QtQml>
 #include <QtGlobal>
@@ -41,6 +42,7 @@ public:
     {
         Q_ASSERT(uri == QLatin1String("Nemo.UX.Models") || uri == QLatin1String("org.nemomobile.uxmodels"));
         qmlRegisterType<CalendarModel>(uri, 1, 0, "CalendarModel");
+        qmlRegisterType<ImagesListModel>(uri, 1, 0, "ImagesListModel");
     }
 };
 
