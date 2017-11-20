@@ -7,8 +7,9 @@ ImagesListModel::ImagesListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     m_hash.insert(Qt::UserRole ,QByteArray("fileName"));
-    m_hash.insert(Qt::UserRole+1 ,QByteArray("isDir"));
-    m_hash.insert(Qt::UserRole+2 ,QByteArray("previews"));
+    m_hash.insert(Qt::UserRole+1 ,QByteArray("path"));
+    m_hash.insert(Qt::UserRole+2 ,QByteArray("isDir"));
+    m_hash.insert(Qt::UserRole+3 ,QByteArray("previews"));
 
     m_rootDir = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
     m_previewCount = 4;
@@ -42,8 +43,10 @@ QVariant ImagesListModel::data(const QModelIndex &index, int role) const
     case Qt::UserRole:
         return item.fileName;
     case Qt::UserRole+1:
-        return item.isDir;
+        return item.path;
     case Qt::UserRole+2:
+        return item.isDir;
+    case Qt::UserRole+3:
         return item.previews;
     default:
         return QVariant();
@@ -61,6 +64,7 @@ QVariant ImagesListModel::get(const int idx) const
     ImagesListItem item = m_imagesList.at(idx);
 
     itemData.insert("fileName",item.fileName);
+    itemData.insert("path",item.path);
     itemData.insert("isDir",item.isDir);
     itemData.insert("previews",item.previews);
 
@@ -79,13 +83,13 @@ void ImagesListModel::setRootDir(QString root)
     }
 }
 
-void ImagesListModel::setRecursive(bool recursive)
+void ImagesListModel::setShowDirs(bool showDirs)
 {
-    if(recursive != m_recursive)
+    if(showDirs != m_showDirs)
     {
-        m_recursive = recursive;
+        m_showDirs = showDirs;
         fill();
-        emit recursiveChanged();
+        emit showDirsChanged();
     }
 }
 
@@ -104,13 +108,14 @@ void ImagesListModel::fill()
     m_imagesList.clear();
 
     QDir rootDir(m_rootDir);
-    if(m_recursive)
+    if(m_showDirs)
     {
         rootDir.setFilter(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot);
         for(int i=0; i < rootDir.entryList().count(); i++)
         {
             ImagesListItem item;
-            item.fileName = m_rootDir+"/"+rootDir.entryList().at(i);
+            item.fileName = rootDir.entryList().at(i);
+            item.path = m_rootDir+"/"+rootDir.entryList().at(i);
             item.isDir = true;
             item.previews = loadDirPreview(item.fileName);
 
@@ -125,7 +130,8 @@ void ImagesListModel::fill()
     for(int i=0; i < rootDir.entryList().count(); i++)
     {
         ImagesListItem item;
-        item.fileName = m_rootDir+"/"+rootDir.entryList().at(i);
+        item.fileName = rootDir.entryList().at(i);
+        item.path = m_rootDir+"/"+rootDir.entryList().at(i);
         item.isDir = false;
         item.previews = QStringList();
 

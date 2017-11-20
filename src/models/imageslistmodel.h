@@ -38,12 +38,13 @@ class ImagesListModel : public QAbstractListModel
     Q_OBJECT
     struct ImagesListItem{
         QString fileName;
+        QString path;
         bool isDir;
         QStringList previews;
     };
 
     Q_PROPERTY(QString rootDir READ rootDir WRITE setRootDir NOTIFY rootDirChanged)
-    Q_PROPERTY(bool recursive READ recursive WRITE setRecursive NOTIFY recursiveChanged)
+    Q_PROPERTY(bool showDirs READ showDirs WRITE setShowDirs NOTIFY showDirsChanged)
     Q_PROPERTY(int previewCout READ previewCout WRITE setPreviewCout NOTIFY previewCoutChanged)
 
 public:
@@ -53,11 +54,11 @@ public:
     QHash<int, QByteArray> roleNames() const {return m_hash;}
 
     void setRootDir(QString root);
-    void setRecursive(bool recursive);
+    void setShowDirs(bool showDirs);
     void setPreviewCout(int previewCout);
 
     QString rootDir(){return m_rootDir;}
-    bool recursive(){return m_recursive;}
+    bool showDirs(){return m_showDirs;}
     int previewCout(){return m_previewCount;}
 
 public slots:
@@ -65,7 +66,7 @@ public slots:
 
 signals:
     void rootDirChanged();
-    void recursiveChanged();
+    void showDirsChanged();
     void previewCoutChanged();
 
 private:
@@ -77,7 +78,7 @@ private:
     QStringList m_filters;
 
     QString m_rootDir;
-    bool m_recursive;
+    bool m_showDirs;
     int m_previewCount;
 };
 
