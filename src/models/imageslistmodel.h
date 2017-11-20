@@ -73,6 +73,8 @@ private:
     QList<ImagesListItem> m_imagesList;
 
     void fill();
+    QStringList loadDirPreview(QString dir);
+    QStringList m_filters;
 
     QString m_rootDir;
     bool m_recursive;

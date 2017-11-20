@@ -1,6 +1,7 @@
 #include "imageslistmodel.h"
 
 #include <QDir>
+#include <QStandardPaths>
 
 ImagesListModel::ImagesListModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -8,6 +9,12 @@ ImagesListModel::ImagesListModel(QObject *parent) :
     m_hash.insert(Qt::UserRole ,QByteArray("fileName"));
     m_hash.insert(Qt::UserRole+1 ,QByteArray("isDir"));
     m_hash.insert(Qt::UserRole+2 ,QByteArray("previews"));
+
+    m_rootDir = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
+    m_previewCount = 4;
+
+    m_filters << "*.png" << "*.jpg" << "*.bmp";
+    fill();
 }
 
 int ImagesListModel::rowCount(const QModelIndex &parent) const
@@ -94,5 +101,59 @@ void ImagesListModel::setPreviewCout(int previewCout)
 
 void ImagesListModel::fill()
 {
+    m_imagesList.clear();
 
+    QDir rootDir(m_rootDir);
+    if(m_recursive)
+    {
+        rootDir.setFilter(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot);
+        for(int i=0; i < rootDir.entryList().count(); i++)
+        {
+            ImagesListItem item;
+            item.fileName = m_rootDir+"/"+rootDir.entryList().at(i);
+            item.isDir = true;
+            item.previews = loadDirPreview(item.fileName);
+
+            m_imagesList.append(item);
+        }
+    }
+
+    rootDir.setFilter(QDir::Files | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot);
+    rootDir.setSorting(QDir::DirsFirst | QDir::Time);
+    rootDir.setNameFilters(m_filters);
+
+    for(int i=0; i < rootDir.entryList().count(); i++)
+    {
+        ImagesListItem item;
+        item.fileName = m_rootDir+"/"+rootDir.entryList().at(i);
+        item.isDir = false;
+        item.previews = QStringList();
+
+        m_imagesList.append(item);
+    }
+
+    dataChanged(createIndex(0, 0), createIndex(rowCount()-1, 0));
 }
+
+QStringList ImagesListModel::loadDirPreview(QString dir)
+{
+    QStringList previewFiles;
+
+    QDir m_scanDir(dir);
+    m_scanDir.setFilter(QDir::Files | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot);
+    m_scanDir.setSorting(QDir::Time);
+    m_scanDir.setNameFilters(m_filters);
+
+    int s_count = m_previewCount;
+    if(s_count > m_scanDir.entryList().count())
+    {
+        s_count = m_scanDir.entryList().count();
+    }
+
+    for(int i=0; i < s_count; i++)
+    {
+        previewFiles << dir+"/"+m_scanDir.entryList().at(i);
+    }
+    return previewFiles;
+}
+
