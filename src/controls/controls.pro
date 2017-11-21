@@ -25,6 +25,7 @@ QML_FILES += \
     qml/InverseMouseArea.qml \
     qml/IconButton.qml \
     qml/DatePicker.qml \
+    qml/ImagesPicker.qml\
     qml/dialogs/QueryDialog.qml
 
 OTHER_FILES += qmldir \
@@ -68,3 +69,6 @@ images.files = $$_PRO_FILE_PWD_/images
 images.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 
 INSTALLS += target qmlfiles images dialogs
+
+DISTFILES += \
+    qml/ImagesPicker.qml

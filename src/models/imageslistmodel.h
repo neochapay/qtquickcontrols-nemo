@@ -40,7 +40,7 @@ class ImagesListModel : public QAbstractListModel
         QString fileName;
         QString path;
         bool isDir;
-        QStringList previews;
+        QVariantList previews;
     };
 
     Q_PROPERTY(QString rootDir READ rootDir WRITE setRootDir NOTIFY rootDirChanged)
@@ -61,6 +61,8 @@ public:
     bool showDirs(){return m_showDirs;}
     int previewCout(){return m_previewCount;}
 
+    Q_INVOKABLE int count(){return m_imagesList.count();}
+
 public slots:
     QVariant get(const int idx) const;
 
@@ -74,7 +76,7 @@ private:
     QList<ImagesListItem> m_imagesList;
 
     void fill();
-    QStringList loadDirPreview(QString dir);
+    QVariantList loadDirPreview(QString dir);
     QStringList m_filters;
 
     QString m_rootDir;

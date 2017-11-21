@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QStandardPaths>
+#include <QDebug>
 
 ImagesListModel::ImagesListModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -14,7 +15,7 @@ ImagesListModel::ImagesListModel(QObject *parent) :
     m_rootDir = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first();
     m_previewCount = 4;
 
-    m_filters << "*.png" << "*.jpg" << "*.bmp";
+    m_filters << "*.png" << "*.jpg" << "*.bmp" << "*.PNG" << "*.JPG";
     fill();
 }
 
@@ -80,6 +81,8 @@ void ImagesListModel::setRootDir(QString root)
         m_rootDir = root;
         fill();
         emit rootDirChanged();
+
+        qDebug() << "root changed" << m_rootDir;
     }
 }
 
@@ -117,7 +120,7 @@ void ImagesListModel::fill()
             item.fileName = rootDir.entryList().at(i);
             item.path = m_rootDir+"/"+rootDir.entryList().at(i);
             item.isDir = true;
-            item.previews = loadDirPreview(item.fileName);
+            item.previews = loadDirPreview(item.path);
 
             m_imagesList.append(item);
         }
@@ -133,7 +136,7 @@ void ImagesListModel::fill()
         item.fileName = rootDir.entryList().at(i);
         item.path = m_rootDir+"/"+rootDir.entryList().at(i);
         item.isDir = false;
-        item.previews = QStringList();
+        item.previews = QVariantList();
 
         m_imagesList.append(item);
     }
@@ -141,9 +144,9 @@ void ImagesListModel::fill()
     dataChanged(createIndex(0, 0), createIndex(rowCount()-1, 0));
 }
 
-QStringList ImagesListModel::loadDirPreview(QString dir)
+QVariantList ImagesListModel::loadDirPreview(QString dir)
 {
-    QStringList previewFiles;
+    QVariantList previewFiles;
 
     QDir m_scanDir(dir);
     m_scanDir.setFilter(QDir::Files | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot);
@@ -160,6 +163,7 @@ QStringList ImagesListModel::loadDirPreview(QString dir)
     {
         previewFiles << dir+"/"+m_scanDir.entryList().at(i);
     }
+
     return previewFiles;
 }
 
