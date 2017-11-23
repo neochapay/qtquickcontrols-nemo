@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtQuick.Controls.Nemo 1.0
 import Nemo.UX.Models 1.0
 
+import Nemo.Thumbnailer 1.0
+
 GridView {
     id: imagesPicker
     cellHeight: cellWidth
@@ -67,7 +69,9 @@ GridView {
                 width: previewGrid.cellWidth
                 height: previewGrid.cellHeight
                 fillMode: Image.PreserveAspectCrop
-                source: modelData
+                asynchronous: true
+                sourceSize: Qt.size(previewGrid.cellWidth, previewGrid.cellHeight)
+                source: "image://nemoThumbnail//"+modelData
             }
         }
 

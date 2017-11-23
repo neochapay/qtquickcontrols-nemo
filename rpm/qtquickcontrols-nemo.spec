@@ -16,6 +16,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  fdupes
 Requires:   qt5-qtquickcontrols
 Requires:   qt5-qtgraphicaleffects
+Requires:   nemo-qml-plugin-thumbnailer-qt5
 
 %description
 Qt is a cross-platform application and UI framework. Using Qt, you can
