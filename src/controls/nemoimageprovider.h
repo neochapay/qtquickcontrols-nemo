@@ -2,6 +2,7 @@
 #define NEMOIMAGEPROVIDER_H
 /*
  * Copyright (C) 2013 Aleksi Suomalainen <suomalainen.aleksi@gmail.com>
+ * Copyright (C) 2017 Sergey Chupligin <neochapay@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +21,6 @@
  */
 #include <QQuickImageProvider>
 #include <QDebug>
-#include "themedaemon/mlocalthemedaemonclient.h"
 
 class NemoImageProvider : public QQuickImageProvider
 {
@@ -29,7 +29,8 @@ public:
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 private:
-    MLocalThemeDaemonClient* m_client;
+    QStringList m_iconsDirs;
+    QString getImageUrl(QString imageId);
 };
 
 #endif // NEMOIMAGEPROVIDER_H

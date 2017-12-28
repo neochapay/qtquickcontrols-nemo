@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Aleksi Suomalainen <suomalainen.aleksi@gmail.com>
+ * Copyright (C) 2017 Sergey Chupligin <neochapay@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,20 +19,49 @@
  */
 #include "nemoimageprovider.h"
 
+#include <QFile>
+
 NemoImageProvider::NemoImageProvider() :
-    QQuickImageProvider(QQuickImageProvider::Image),
-    m_client(new MLocalThemeDaemonClient())
+    QQuickImageProvider(QQuickImageProvider::Image)
 {
+    m_iconsDirs.append("/usr/share/themes/glacier/meegotouch/icons");
+    m_iconsDirs.append("/usr/share/themes/glacier/fontawesome/icons");
 }
 
 QImage NemoImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size);
     Q_UNUSED(requestedSize);
-    return m_client->readImage(id);
+
+    QString imageUrl = getImageUrl(id);
+    if(imageUrl.length() > 0)
+    {
+        return QImage(imageUrl);
+    }
+    return QImage();
 }
+
 QPixmap NemoImageProvider::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(size);
-    return m_client->requestPixmap(id,requestedSize);
+    Q_UNUSED(requestedSize);
+
+    QString imageUrl = getImageUrl(id);
+    if(imageUrl.length() > 0)
+    {
+        return QPixmap(imageUrl);
+    }
+    return QPixmap();
+}
+
+QString NemoImageProvider::getImageUrl(QString imageId)
+{
+    foreach (QString dir, m_iconsDirs)
+    {
+        QFile(dir+"/"+imageId).exists();
+        return dir+"/"+imageId;
+    }
+
+    qWarning() << "Image " << imageId << " not found";
+    return nullptr;
 }

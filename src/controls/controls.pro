@@ -37,8 +37,6 @@ HEADERS += \
     nemopage.h \
     qquickfilteringmousearea.h \
     nemoimageprovider.h \
-    themedaemon/mlocalthemedaemonclient.h \
-    themedaemon/mabstractthemedaemonclient.h \
     sizing.h \
     theme.h
 
@@ -49,8 +47,6 @@ SOURCES += \
     nemopage.cpp \
     qquickfilteringmousearea.cpp \
     nemoimageprovider.cpp \
-    themedaemon/mlocalthemedaemonclient.cpp \
-    themedaemon/mabstractthemedaemonclient.cpp \
     sizing.cpp \
     theme.cpp
 
