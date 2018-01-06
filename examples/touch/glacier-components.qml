@@ -117,8 +117,8 @@ ApplicationWindow {
             page: "content/ButtonRowPage.qml"
         }
         ListElement {
-            title: "Query Dialog"
-            page: "content/QueryDialogPage.qml"
+            title: "Dialogs"
+            page: "content/DialogsPage.qml"
         }
         ListElement {
             title: "Icons"
