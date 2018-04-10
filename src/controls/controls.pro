@@ -26,7 +26,8 @@ QML_FILES += \
     qml/IconButton.qml \
     qml/DatePicker.qml \
     qml/ScrollDecorator.qml \
-    qml/dialogs/QueryDialog.qml
+    qml/dialogs/QueryDialog.qml \
+    qml/TextField.qml
 
 OTHER_FILES += qmldir \
     $$QML_FILES
@@ -39,7 +40,9 @@ HEADERS += \
     qquickfilteringmousearea.h \
     nemoimageprovider.h \
     sizing.h \
-    theme.h
+    theme.h \
+    editfilter.h \
+    nemofocussingleton.h
 
 SOURCES += \
     qquicknemocontrolsextensionplugin.cpp \
@@ -49,7 +52,9 @@ SOURCES += \
     qquickfilteringmousearea.cpp \
     nemoimageprovider.cpp \
     sizing.cpp \
-    theme.cpp
+    theme.cpp \
+    editfilter.cpp \
+    nemofocussingleton.cpp
 
 target.path = $$[QT_INSTALL_QML]/$$PLUGIN_IMPORT_PATH
 
