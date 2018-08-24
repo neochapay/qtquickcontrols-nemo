@@ -39,6 +39,8 @@ import Nemo.Notifications 1.0
 Page {
     id: root
 
+    property alias progress: simpleNotify.progress
+
     headerTools: HeaderToolsLayout {
         showBackButton: true;
         title: "Notifications"
@@ -71,6 +73,33 @@ Page {
                 simpleNotify.summary = "Hello Nemo! You have a notification"
                 simpleNotify.publish()
             }
+        }
+
+        Button {
+            id: progressButton
+            text: qsTr("Start progress")
+            onClicked: {
+                progress = 0
+                progressTimer.start()
+            }
+        }
+    }
+
+
+    Timer{
+        id: progressTimer
+        running: false
+        repeat: true
+
+        interval: 1000
+
+        onTriggered: {
+            if(progress <= 1) {
+                simpleNotify.progress += 0.05
+            } else {
+                simpleNotify.progress = 0
+            }
+            simpleNotify.publish()
         }
     }
 }
