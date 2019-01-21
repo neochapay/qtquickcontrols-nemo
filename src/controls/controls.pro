@@ -29,6 +29,7 @@ QML_FILES += \
     qml/TimePicker.qml \
     qml/ScrollDecorator.qml \
     qml/TextField.qml \
+    qml/NemoImage.qml \
     qml/ErrorStackPage.qml \
     qml/dialogs/QueryDialog.qml \
     qml/dialogs/SelectionDialog.qml \

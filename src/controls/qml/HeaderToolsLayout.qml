@@ -39,7 +39,7 @@ Item {
 
         visible: showBackButton
 
-        Image {
+        NemoImage {
             anchors.centerIn: parent
             height: toolMeasure
             width: height
@@ -111,7 +111,7 @@ Item {
         }
     }
 
-    Image {
+    NemoImage {
         id: dots
         anchors{
             right: parent.right
